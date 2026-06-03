@@ -34,22 +34,36 @@ const THEME_COLOR = {
   "Education & Knowledge": "#e8a87c", "Philosophy of Life": "#3ecfb2", "Gender & Society": "#f472b6",
 };
 
-const C = {
+const DARK_COLORS = {
   bg: "#0b0d12", card: "#13161f", border: "#1e2235", text: "#dde1f0", muted: "#56617a",
   faint: "#1a1e2d", accent: "#6366f1", teal: "#3ecfb2", rose: "#f26b7a",
   amber: "#f5a623", violet: "#a78bfa", gold: "#f59e0b",
 };
+const LIGHT_COLORS = {
+  bg: "#f8f8fb", card: "#ffffff", border: "#d1d5db", text: "#111827", muted: "#6b7280",
+  faint: "#f3f4f6", accent: "#4338ca", teal: "#0f766e", rose: "#be123c",
+  amber: "#c2410c", violet: "#7c3aed", gold: "#d97706",
+};
+const C = { ...DARK_COLORS };
 
 const STYLE = `
   @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap');
   *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-  body{background:#0b0d12;color:#dde1f0;font-family:'Space Grotesk',sans-serif;min-height:100vh}
+  body{background:var(--body-bg,#0b0d12);color:var(--body-text,#dde1f0);font-family:'Space Grotesk',sans-serif;min-height:100vh}
   ::-webkit-scrollbar{width:3px;height:3px}
   ::-webkit-scrollbar-thumb{background:#252a38;border-radius:2px}
   @keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
   select,input{font-family:'Space Grotesk',sans-serif}
 `;
 
+function applyTheme(theme) {
+  const selected = theme === "dark" ? DARK_COLORS : LIGHT_COLORS;
+  Object.assign(C, selected);
+  document.body.style.background = selected.bg;
+  document.body.style.color = selected.text;
+  document.body.style.setProperty("--body-bg", selected.bg);
+  document.body.style.setProperty("--body-text", selected.text);
+}
 function inject() {
   if (!document.getElementById("ma-s")) { const s = document.createElement("style"); s.id = "ma-s"; s.textContent = STYLE; document.head.appendChild(s); }
 }
@@ -670,7 +684,16 @@ const TABS = [
 
 export default function App() {
   const [tab, setTab] = useState("overview");
+  const [theme, setTheme] = useState(() => {
+    if (typeof window === "undefined") return "dark";
+    return localStorage.getItem("theme") || "dark";
+  });
   useEffect(inject, []);
+  useEffect(() => {
+    applyTheme(theme);
+    localStorage.setItem("theme", theme);
+  }, [theme]);
+  Object.assign(C, theme === "dark" ? DARK_COLORS : LIGHT_COLORS);
   const views = {
     overview: <Overview />, section: <SectionDetail />,
     anthro: <AnthroView />, essays: <EssayView />,
@@ -680,6 +703,13 @@ export default function App() {
     <div style={{ padding: "22px 16px 14px", borderBottom: `1px solid ${C.border}` }}>
       <div style={{ display: "flex", alignItems: "baseline", gap: 10, flexWrap: "wrap" }}>
         <h1 style={{ fontSize: 20, fontWeight: 600, color: C.text }}>UPSC Mains PYQ Analyser</h1>
+        <button onClick={() => setTheme(theme === "dark" ? "light" : "dark")} style={{
+          marginLeft: "auto", padding: "8px 12px", borderRadius: 999,
+          border: `1px solid ${C.border}`, background: C.faint,
+          color: C.text, cursor: "pointer", fontSize: 11, fontWeight: 600
+        }}>
+          {theme === "dark" ? "☀ Light" : "🌙 Dark"}
+        </button>
         <span style={{
           fontSize: 10, background: C.gold + "22", color: C.gold, border: `1px solid ${C.gold}44`,
           borderRadius: 5, padding: "2px 8px", fontWeight: 600

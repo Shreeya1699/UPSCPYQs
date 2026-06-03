@@ -1,16 +1,41 @@
-# React + Vite
+# UPSC PYQ Analyser
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This is a React application built with Vite that helps UPSC mains aspirants explore past year questions across General Studies, Anthropology, Essay topics, and subject microthemes.
 
-Currently, two official plugins are available:
+## What this app does
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+- Visualizes UPSC mains PYQs from 2013 to 2025.
+- Provides an overview of question count trends across GS sections.
+- Lets users browse microthemes by GS section and inspect question details.
+- Includes an Anthropology view for Paper I and Paper II questions.
+- Offers essay topic browsing by year and thematic categories.
+- Supports light/dark theme switching with a header toggle.
 
-## React Compiler
+## Key features
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- Section-wise breakdown for UPSC GS microthemes.
+- 2025-specific question highlights and trend indicators.
+- Expandable microtheme cards for detailed question lists.
+- Persistent theme preference using `localStorage`.
+- Responsive header tabs for fast navigation.
 
-## Expanding the ESLint configuration
+## Run locally
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+```bash
+cd upsc-analyser
+npm install
+npm run dev
+```
+
+Then open the local Vite URL shown in the terminal.
+
+## Build for production
+
+```bash
+cd upsc-analyser
+npm run build
+```
+
+## Notes
+
+The app is implemented entirely in `src/App.jsx` using inline styles and a small dataset in JavaScript objects. The theme toggle updates the visual palette and preserves the selected mode on refresh.
